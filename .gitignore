@@ -38,6 +38,7 @@ functions/node_modules/
 functions/.runtimeconfig.json
 
 # Local firebase client config (kept out of repo)
+firebase.js
 src/firebase.js
 
 # OS
