@@ -1,0 +1,158 @@
+@import "tailwindcss";
+
+/* ==========================
+   Variáveis Globais
+========================== */
+:root {
+  /* Fundos e textos */
+  --background: 230 15% 15%;         
+  --foreground: 210 95% 95%;         
+
+  /* Cartões */
+  --card: 230 18% 20%;                
+  --card-foreground: 210 95% 95%;     
+
+  /* Botões */
+  --primary: 200 90% 50%;             
+  --primary-foreground: 0 0% 100%;   
+  --secondary: 340 80% 55%;           
+  --secondary-foreground: 0 0% 100%;
+  --destructive: 0 80% 60%;           
+  --destructive-foreground: 0 0% 100%;
+
+  /* Borda, inputs e rings */
+  --border: 230 25% 30%;              
+  --input: 230 25% 30%;
+  --ring: 200 90% 50%;
+
+  --radius: 0.75rem;
+  --transition-smooth: all 0.3s ease-in-out;
+}
+
+/* ==========================
+   Estilos Globais
+========================== */
+body {
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: "Inter", sans-serif;
+  line-height: 1.6;
+}
+
+/* ==========================
+   Cards
+========================== */
+.card {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border-radius: var(--radius);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+  transition: var(--transition-smooth);
+}
+.card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.6);
+}
+
+/* ==========================
+   Botões
+========================== */
+button {
+  border-radius: var(--radius);
+  transition: var(--transition-smooth);
+  cursor: pointer;
+}
+button.bg-primary {
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+button.bg-primary:hover {
+  background-color: hsl(var(--primary) / 0.85);
+}
+button.bg-secondary {
+  background-color: hsl(var(--secondary));
+  color: hsl(var(--secondary-foreground));
+}
+button.bg-secondary:hover {
+  background-color: hsl(var(--secondary) / 0.85);
+}
+button.bg-destructive {
+  background-color: hsl(var(--destructive));
+  color: hsl(var(--destructive-foreground));
+}
+button.bg-destructive:hover {
+  background-color: hsl(var(--destructive) / 0.85);
+}
+
+/* ==========================
+   Inputs
+========================== */
+input, textarea, select {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 0.5rem;
+  transition: var(--transition-smooth);
+}
+input:focus, textarea:focus, select:focus {
+  outline: none;
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 2px hsl(var(--ring) / 0.5);
+}
+
+/* ==========================
+   Header / Footer
+========================== */
+header, footer {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  padding: 1rem 2rem;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+}
+
+/* ==========================
+   Links
+========================== */
+a {
+  color: hsl(var(--primary));
+  transition: var(--transition-smooth);
+}
+a:hover {
+  color: hsl(var(--secondary));
+}
+
+/* ==========================
+   Sidebar
+========================== */
+.sidebar {
+  background-color: hsl(var(--card));
+  color: hsl(var(--card-foreground));
+  border-right: 1px solid hsl(var(--border));
+  min-height: 100vh;
+  padding: 1rem;
+}
+
+/* ==========================
+   Gradientes e Hover
+========================== */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, hsl(var(--primary)), hsl(var(--secondary)));
+}
+.bg-gradient-accent {
+  background: linear-gradient(135deg, hsl(var(--secondary)), hsl(var(--primary)));
+}
+
+/* ==========================
+   Tipografia
+========================== */
+h1, h2, h3, h4, h5, h6 {
+  color: hsl(var(--foreground));
+}
+
+/* ==========================
+   Utilities
+========================== */
+.text-muted {
+  color: hsl(var(--muted-foreground));
+}
