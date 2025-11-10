@@ -3,14 +3,16 @@ import { getAuth, GoogleAuthProvider } from "firebase/auth";
 import { getFirestore } from "firebase/firestore";
 import { getStorage } from "firebase/storage"; 
 
+// Read configuration from Vite environment variables (VITE_ prefix).
+// Create a `.env.local` in the project root with these values (do NOT commit it).
 const firebaseConfig = {
-  apiKey: "AIzaSyASRGkAnX69HQLYaRO1ekMB5HMS64igY_0",
-  authDomain: "gamehub-c02df.firebaseapp.com",
-  projectId: "gamehub-c02df",
-  storageBucket: "gamehub-c02df.appspot.com",
-  messagingSenderId: "524226813079",
-  appId: "1:524226813079:web:75afa514c73f71c6d59dd2",
-  measurementId: "G-X3SSGGYYHJ"
+  apiKey: import.meta.env.VITE_FIREBASE_API_KEY,
+  authDomain: import.meta.env.VITE_FIREBASE_AUTH_DOMAIN,
+  projectId: import.meta.env.VITE_FIREBASE_PROJECT_ID,
+  storageBucket: import.meta.env.VITE_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: import.meta.env.VITE_FIREBASE_MESSAGING_SENDER_ID,
+  appId: import.meta.env.VITE_FIREBASE_APP_ID,
+  measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID
 };
 
 const app = initializeApp(firebaseConfig);
