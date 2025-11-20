@@ -68,7 +68,6 @@ Jest + React Testing Library (sugerido para testes)
 
 Status: Em desenvolvimento / Beta
 
-(Atualiza conforme o estado real do projeto)
 
 
 
@@ -351,19 +350,15 @@ Descrição: O quê, porquê e como testar
 
 
 
-# 📄 9. Licença
-
-Escolhe uma licença (ex: MIT).
-
-Caso ainda não tenhas decidido, usa MIT temporariamente.
 
 
 
-# 👤 10. Autor
+# 👤 9. Autor
 
 Autor: Ribeiro-20
 
-Contacto: (email ou GitHub)
+Contacto: josepedroribeiro06@gmail.com
+
 
 
 
