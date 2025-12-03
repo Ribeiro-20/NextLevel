@@ -3,7 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { ShoppingCart, X, Trash2, Package } from "lucide-react";
 import { doc, getDoc, collection, getDocs, updateDoc, arrayRemove } from "firebase/firestore";
-import { db } from "../firebase";
+import { db, auth } from "../firebase";
+import { redirectToCheckout } from "../utils/stripe";
 import toast from "react-hot-toast";
 
 export default function FloatingCart({ user }) {
@@ -109,15 +110,17 @@ export default function FloatingCart({ user }) {
       setRemovingId(null);
     }
   };
-
-  // Calcular total
-  const total = cartItems.reduce((sum, item) => sum + (item.price || 0), 0);
-
+  // Calcular total do carrinho (preço * quantidade)
+  const total = cartItems.reduce((sum, item) => {
+    const price = Number(item.price) || 0;
+    const qty = Number(item.quantity) || 1;
+    return sum + price * qty;
+  }, 0);
   return (
     <>
       {/* Floating Button */}
       <motion.div
-        className="fixed bottom-6 right-6 z-50"
+        className="fixed bottom-6 right-6 z-70"
         initial={{ scale: 0, opacity: 0 }}
         animate={{ scale: 1, opacity: 1 }}
         transition={{ delay: 0.5, type: "spring", stiffness: 260, damping: 20 }}
@@ -180,7 +183,7 @@ export default function FloatingCart({ user }) {
 
             {/* Panel */}
             <motion.div
-              className="fixed right-0 top-0 h-full w-full md:w-96 bg-gray-900/95 backdrop-blur-xl border-l border-gray-800 shadow-2xl z-50 flex flex-col"
+              className="fixed right-0 top-0 h-full w-full md:w-96 bg-gray-900/95 backdrop-blur-xl border-l border-gray-800 shadow-2xl z-70 flex flex-col"
               initial={{ x: "100%" }}
               animate={{ x: 0 }}
               exit={{ x: "100%" }}
@@ -302,17 +305,41 @@ export default function FloatingCart({ user }) {
                   </div>
 
                   {/* Botão Checkout */}
-                  <motion.button
-                    onClick={() => {
-                      setIsOpen(false);
-                      navigate("/checkout");
-                    }}
-                    className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-green-500/30 hover:shadow-green-500/50 transition-all duration-300"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    Finalizar Compra
-                  </motion.button>
+                      <motion.button
+                        onClick={async () => {
+                          setIsOpen(false);
+                          // Compose items with image when available
+                          const items = cartItems.map(i => ({
+                            id: i.id || i.title,
+                            name: i.title || i.name,
+                            price: i.price || 0,
+                            quantity: i.quantity || 1,
+                            image: i.img || (i.images && i.images[0]) || i.banner || null,
+                          }));
+                          const email = auth && auth.currentUser ? auth.currentUser.email : null;
+
+                          // Show a loading toast while we attempt to open Stripe
+                          const loadingToastId = toast.loading('A iniciar checkout...');
+                          try {
+                            await redirectToCheckout(items, email);
+                            // If redirectToCheckout resolves, Stripe will navigate away. Dismiss loader just in case.
+                            toast.dismiss(loadingToastId);
+                          } catch (err) {
+                            toast.dismiss(loadingToastId);
+                            console.error('Stripe redirect failed', err);
+                            // Show a clear error message to the user instead of navigating away
+                            const msg = (err && err.message) ? err.message : 'Falha ao iniciar o pagamento.';
+                            toast.error('Falha ao iniciar o pagamento: ' + msg);
+                            // Leave user on page so they can retry or inspect
+                          }
+                        }}
+                        className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-400 hover:to-emerald-500 text-white font-bold py-3.5 rounded-xl shadow-lg shadow-green-500/30 hover:shadow-green-500/50 transition-all duration-300"
+                        whileHover={{ scale: 1.02 }}
+                        whileTap={{ scale: 0.98 }}
+                      >
+                        Finalizar Compra
+                      </motion.button>
+                  {/* Dev-only test button removed — checkout uses real cart items now */}
 
                   <motion.button
                     onClick={() => setIsOpen(false)}
