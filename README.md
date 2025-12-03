@@ -199,6 +199,62 @@ public/              # assets públicos
 
 src/
 
+## Stripe & Payments (local development)
+
+This project integrates Stripe Checkout. Important notes for local development and deployment:
+
+- Do NOT store secret keys in the client or commit them to the repo. Only the Stripe publishable key (starting with `pk_`) belongs in `.env.local` as `VITE_STRIPE_PUBLISHABLE_KEY`.
+- Server-side secrets (Stripe secret key `sk_` and webhook signing secret `whsec_`) must be stored in Firebase Functions config or other secure server-side config. Locally you can put them into `functions/.runtimeconfig.json` (this file is gitignored) or use `firebase functions:config:set`.
+
+Local quickstart for Stripe testing:
+
+1. Fill `.env.local` with your Firebase client keys and `VITE_STRIPE_PUBLISHABLE_KEY`.
+2. Add your Stripe secret and webhook secret to `functions/.runtimeconfig.json` locally, e.g.:
+
+```json
+{
+	"stripe": {
+		"secret": "<YOUR_STRIPE_SECRET_HERE>",
+		"webhook": "<YOUR_STRIPE_WEBHOOK_SECRET_HERE>"
+	},
+	"app": {
+		"success_url": "http://localhost:5173/success",
+		"cancel_url": "http://localhost:5173/cart"
+	}
+}
+```
+
+3. Start the Functions emulator (in a new terminal):
+
+```powershell
+cd C:\Users\josep\GameHub\gamehub
+firebase emulators:start --only functions --project <your-project-id> --config ./firebase.json
+```
+
+4. Start the Vite dev server in another terminal:
+
+```powershell
+npm run dev
+```
+
+5. Add games to the cart and click `Finalizar Compra` — in development the frontend posts to the Functions emulator and opens Stripe Checkout.
+
+Testing webhooks locally (recommended):
+
+- Install the Stripe CLI and forward webhooks to the functions emulator:
+
+```powershell
+stripe login
+stripe listen --forward-to localhost:5001/<your-project-id>/us-central1/stripeWebhook
+```
+
+- When you complete a test checkout, the `stripeWebhook` function will receive `checkout.session.completed` and persist an order to Firestore (emulator or production, depending on your setup).
+
+Security reminder:
+
+- If any secret key has been committed or leaked, rotate it immediately in the Stripe dashboard.
+
+
 &nbsp; components/        # componentes reutilizáveis (Header, Footer, GameCard...)
 
 &nbsp; pages/             # páginas (Home, Login, Checkout, AdminPanel...)
