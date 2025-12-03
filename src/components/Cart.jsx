@@ -1,5 +1,8 @@
 // src/components/Cart.jsx
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { redirectToCheckout } from "../utils/stripe";
+import { auth } from "../firebase";
 
 export default function Cart({ cart, removeFromCart, closeCart }) {
   const navigate = useNavigate();
@@ -10,7 +13,7 @@ export default function Cart({ cart, removeFromCart, closeCart }) {
       <button onClick={closeCart} className="absolute top-4 right-4 text-red-600 font-bold">X</button>
       <h2 className="text-2xl font-bold mb-4">Carrinho</h2>
 
-      {cart.length === 0 ? (
+      {cart.length === 0 ? (  
         <p className="text-gray-500">Seu carrinho está vazio.</p>
       ) : (
         <>
@@ -33,15 +36,50 @@ export default function Cart({ cart, removeFromCart, closeCart }) {
 
           <div className="mt-6 border-t pt-4">
             <p className="text-xl font-bold">Total: € {total}</p>
-            <button
-              onClick={() => navigate("/checkout")}
-              className="mt-2 w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
-            >
-              Finalizar Compra
-            </button>
+            <CheckoutButtons
+              cart={cart}
+              navigate={navigate}
+            />
           </div>
         </>
       )}
+    </div>
+  );
+}
+
+function CheckoutButtons({ cart, navigate }) {
+  const [loading, setLoading] = useState(false);
+
+  const handleStripe = async () => {
+    if (!cart || cart.length === 0) return;
+    setLoading(true);
+    try {
+      const items = cart.map(g => ({ id: g.id || g.title, name: g.title, price: g.price, quantity: g.quantity || 1 }));
+      const email = auth.currentUser ? auth.currentUser.email : null;
+      await redirectToCheckout(items, email, '/create-checkout-session');
+    } catch (err) {
+      console.error('Checkout error', err);
+      alert('Erro ao iniciar o checkout: ' + (err.message || err));
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <div>
+      <button
+        onClick={handleStripe}
+        disabled={loading}
+        className="mt-2 w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700 disabled:opacity-50"
+      >
+        {loading ? 'A processar...' : 'Pagar com Stripe'}
+      </button>
+      <button
+        onClick={() => navigate('/checkout')}
+        className="mt-2 w-full bg-green-600 text-white py-2 rounded hover:bg-green-700"
+      >
+        Finalizar Compra (Métodos alternativos)
+      </button>
     </div>
   );
 }

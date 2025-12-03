@@ -1,0 +1,10 @@
+{
+  "stripe": {
+    "secret": "<YOUR_STRIPE_SECRET_HERE>",
+    "webhook": "<YOUR_STRIPE_WEBHOOK_SECRET_HERE>"
+  },
+  "app": {
+    "success_url": "http://localhost:5173/success",
+    "cancel_url": "http://localhost:5173/cart"
+  }
+}

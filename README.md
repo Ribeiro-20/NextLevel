@@ -305,6 +305,45 @@ Otimização de assets
 
 Testar com Lighthouse
 
+## 💳 8. Integração Stripe (Checkout)
+
+Se quiseres aceitar pagamentos com Stripe, aqui estão os passos mínimos para integrar com segurança usando Stripe Checkout.
+
+1. Criar conta em https://dashboard.stripe.com e testar em *Test mode*.
+2. Obter chaves (Developer → API keys):
+	- `pk_test_...` (Publishable key) → usado no frontend (ex.: `REACT_APP_STRIPE_PUBLISHABLE_KEY`).
+	- `sk_test_...` (Secret key) → usado apenas no servidor / Cloud Functions (`STRIPE_SECRET_KEY`).
+3. Configurar um endpoint server-side que cria uma Checkout Session (ex.: Cloud Functions or Express). O servidor usa `STRIPE_SECRET_KEY` e retorna `session.id`.
+4. No frontend usar `@stripe/stripe-js` e `loadStripe` para redirecionar o utilizador para o Checkout (usa a publishable key).
+5. Configurar um Webhook no Stripe para receber `checkout.session.completed` e actualizar a Firestore/ordens.
+
+Ficheiros que adicionámos como exemplo no repositório:
+- `functions/index.js` → esqueleto da Cloud Function (`createCheckoutSession` + `stripeWebhook`).
+- `src/utils/stripe.js` → helper frontend para redirecionar para o Checkout.
+- `.env.example` → variables de ambiente (placeholders; NÃO colocar chaves reais aqui).
+
+Variáveis de ambiente necessárias (exemplo, preencher em `.env` local):
+```
+REACT_APP_STRIPE_PUBLISHABLE_KEY=pk_test_...
+STRIPE_SECRET_KEY=sk_test_...
+STRIPE_WEBHOOK_SECRET=whsec_...
+SUCCESS_URL=http://localhost:5173/success
+CANCEL_URL=http://localhost:5173/cart
+```
+
+Testar localmente com Stripe CLI:
+```powershell
+stripe login
+stripe listen --forward-to http://localhost:5001/<project>/us-central1/stripeWebhook
+```
+
+Segurança importante:
+- NÃO commites `STRIPE_SECRET_KEY` nem `STRIPE_WEBHOOK_SECRET`.
+- Rotaciona (roll) a secret key imediatamente se a exposure ocorrer.
+- Valida sempre preços/quantidades no servidor; não confies no cliente.
+
+Se quiseres que eu implemente e commite o esqueleto das Cloud Functions e o helper frontend, diz-me que o faço num branch e explico como testar localmente.
+
 
 
 🤝 8. Como Contribuir
