@@ -13,7 +13,7 @@ export default function GameCard({ game, user, setCart }) {
   const [isHover, setIsHover] = useState(false);
   const navigate = useNavigate();
 
-  // ✅ Verificar favorito (otimizado)
+  
   useEffect(() => {
     const checkFavorite = async () => {
       if (!user || !game?.id) return;

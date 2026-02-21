@@ -36,7 +36,7 @@ export default function AdminPanel() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const itemsPerPage = 10;
 
-  // 🔹 Buscar dados com loading
+  // Buscar dados com loading
   async function loadGames() {
     try {
       setLoading(true);

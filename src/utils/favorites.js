@@ -1,11 +1,11 @@
 // src/utils/favorites.js
 
-// 📦 Retorna todos os jogos favoritados do localStorage
+// Retorna todos os jogos favoritados do localStorage
 export function getFavorites() {
   return JSON.parse(localStorage.getItem("favorites")) || [];
 }
 
-// ❤️ Adiciona ou remove um jogo da lista de favoritos
+// Adiciona ou remove um jogo da lista de favoritos
 export function toggleFavorite(game) {
   const current = getFavorites();
   const exists = current.find((g) => g.id === game.id);
@@ -21,7 +21,7 @@ export function toggleFavorite(game) {
   return updated;
 }
 
-// 🔍 Verifica se um jogo já está nos favoritos
+// Verifica se um jogo já está nos favoritos
 export function isFavorite(gameId) {
   const current = getFavorites();
   return current.some((g) => g.id === gameId);
