@@ -111,8 +111,23 @@ export default function FloatingCart({ user }) {
     }
   };
   // Calcular total do carrinho (preço * quantidade)
+  // Promotion handling: support `promo_price` or `promotion` flag with default 20% off
+  const discountRateDefault = 0.2;
+  const getEffectivePrice = (item) => {
+    // explicit promo price wins
+    if (item.promo_price != null) return Number(item.promo_price) || 0;
+    // percentage promo (e.g., promo: 20 -> 20% off)
+    if (item.promo != null && !isNaN(Number(item.promo))) {
+      const percent = Number(item.promo) / 100;
+      return (Number(item.price) || 0) * (1 - percent);
+    }
+    // boolean promotion falls back to default rate
+    if (item.promotion) return (Number(item.price) || 0) * (1 - discountRateDefault);
+    return Number(item.price) || 0;
+  };
+
   const total = cartItems.reduce((sum, item) => {
-    const price = Number(item.price) || 0;
+    const price = getEffectivePrice(item);
     const qty = Number(item.quantity) || 1;
     return sum + price * qty;
   }, 0);
@@ -214,6 +229,7 @@ export default function FloatingCart({ user }) {
 
               {/* Content */}
               <div className="flex-1 overflow-y-auto p-6">
+              
                 {cartItems.length === 0 ? (
                   <motion.div
                     className="flex flex-col items-center justify-center h-full text-center"
@@ -264,15 +280,22 @@ export default function FloatingCart({ user }) {
                               {item.title || item.name}
                             </h4>
                             <p className="text-gray-400 text-xs mb-1">{item.category || item.genre || "Jogo"}</p>
-                            {item.promotion && (
+                            {(item.promotion || item.promo != null || item.promo_price != null) && (
                               <span className="inline-block bg-red-600 text-white text-xs px-2 py-0.5 rounded-full mb-2">
-                                Promoção
+                                {item.promo != null && !isNaN(Number(item.promo)) ? `${Number(item.promo)}% OFF` : 'Promoção'}
                               </span>
                             )}
-                            <div className="flex items-center justify-between mt-2">
-                              <span className="text-green-400 font-bold text-base">
-                                {item.price?.toFixed(2)}€
-                              </span>
+                            <div className="mt-1">
+                              { (item.promotion || item.promo_price || item.promo != null) ? (
+                                <div className="flex items-baseline gap-2">
+                                  <span className="text-green-400 font-bold text-base">{getEffectivePrice(item).toFixed(2)}€</span>
+                                  <span className="text-gray-400 line-through text-xs">{(Number(item.price) || 0).toFixed(2)}€</span>
+                                </div>
+                              ) : (
+                                <span className="text-green-400 font-bold text-base">{(Number(item.price) || 0).toFixed(2)}€</span>
+                              )}
+                            </div>
+                            <div className="flex items-center justify-end mt-2">
                               <motion.button
                                 onClick={() => handleRemoveFromCart(item.id)}
                                 disabled={removingId === item.id}
@@ -291,6 +314,7 @@ export default function FloatingCart({ user }) {
                     </AnimatePresence>
                   </div>
                 )}
+                
               </div>
 
               {/* Footer com total e botão checkout */}
@@ -309,13 +333,19 @@ export default function FloatingCart({ user }) {
                         onClick={async () => {
                           setIsOpen(false);
                           // Compose items with image when available
-                          const items = cartItems.map(i => ({
-                            id: i.id || i.title,
-                            name: i.title || i.name,
-                            price: i.price || 0,
-                            quantity: i.quantity || 1,
-                            image: i.img || (i.images && i.images[0]) || i.banner || null,
-                          }));
+                          const items = cartItems.map(i => {
+                            const originalPrice = Number(i.price) || 0;
+                            const effective = getEffectivePrice(i);
+                            return {
+                              id: i.id || i.title,
+                              name: i.title || i.name,
+                              price: effective || 0,
+                              quantity: i.quantity || 1,
+                              image: i.img || (i.images && i.images[0]) || i.banner || null,
+                              originalPrice: originalPrice !== effective ? originalPrice : undefined,
+                              promo_percent: i.promo != null ? Number(i.promo) : undefined,
+                            };
+                          });
                           const email = auth && auth.currentUser ? auth.currentUser.email : null;
 
                           // Show a loading toast while we attempt to open Stripe

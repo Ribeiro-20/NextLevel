@@ -48,7 +48,7 @@ export default function Carousel({ slides = [], interval = 4000 }) {
       onMouseLeave={() => setPaused(false)}
       onFocus={() => setPaused(true)}
       onBlur={() => setPaused(false)}
-      className="relative w-full overflow-hidden rounded-2xl h-64 md:h-80"
+      className="relative w-full overflow-hidden rounded-2xl h-72 md:h-96 lg:h-[450px]"
     >
       <span ref={announceRef} className="sr-only" aria-live="polite" />
 
@@ -73,7 +73,7 @@ export default function Carousel({ slides = [], interval = 4000 }) {
               <img
                 src={s.banner || s.image || s.cover || s.thumbnail}
                 alt={s.title || s.name || 'Destaque'}
-                className="w-full h-64 md:h-80 object-cover"
+                className="w-full h-72 md:h-96 lg:h-[450px] object-cover"
                 loading="lazy"
                 decoding="async"
               />
