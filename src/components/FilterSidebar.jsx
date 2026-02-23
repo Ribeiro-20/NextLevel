@@ -41,7 +41,7 @@ const types = [
   { name: "Key", icon: Key },
 ];
 
-export default function FilterSidebar({ filters, onFilterChange }) {
+export default function FilterSidebar({ filters, onFilterChange, forceDrawer = false }) {
   const [openSections, setOpenSections] = useState({
     categories: false,
     platforms: false,
@@ -361,6 +361,7 @@ export default function FilterSidebar({ filters, onFilterChange }) {
   return (
     <>
       {/* Desktop sidebar - sticky so filters follow while scrolling */}
+      {!forceDrawer && (
       <div className="hidden lg:block w-80 relative">
         {/* (sentinel removed) */}
         <div className="relative">
@@ -382,9 +383,10 @@ export default function FilterSidebar({ filters, onFilterChange }) {
           </div>
         </div>
       </div>
+      )}
 
       {/* Mobile: floating Filters button + drawer */}
-      <div className="lg:hidden">
+      <div className={forceDrawer ? "" : "lg:hidden"}>
         <div className="fixed left-4 bottom-6 z-40">
           <button
             onClick={() => setDrawerOpen(true)}

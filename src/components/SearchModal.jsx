@@ -80,6 +80,12 @@ export default function SearchModal({ isOpen, onClose, initialQuery = "" }) {
       }
       if (e.key === "Enter") {
         e.preventDefault();
+        const trimmed = (query || "").trim();
+        if (!trimmed) {
+          onClose();
+          navigate("/games");
+          return;
+        }
         const sel = results[active];
         if (sel) {
           onClose();

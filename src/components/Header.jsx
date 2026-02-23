@@ -169,15 +169,14 @@ export default function Header({ user, setUser, setCart, onSearch }) {
           {/* 🔍 Barra de pesquisa MELHORADA - destaque central (most screens) */}
           <div className="hidden sm:flex items-center flex-1 max-w-2xl min-w-0 md:min-w-[280px] justify-center">
             <div className="relative w-full min-w-0 z-50">
-              <div className={`relative flex items-center bg-gray-900/95 rounded-2xl px-3 ${isShrunk ? 'py-1' : 'py-2'} border border-gray-700/40 hover:border-purple-500 transition-all duration-200 shadow-sm`}>
-                <button
-                  onClick={() => setIsSearchOpen(true)}
-                  className="flex items-center gap-2 text-gray-300 hover:text-white focus:outline-none"
-                  aria-label="Abrir busca de jogos"
-                >
+              <button
+                onClick={() => setIsSearchOpen(true)}
+                className={`w-full text-left relative flex items-center bg-gray-900/95 rounded-2xl px-3 ${isShrunk ? 'py-1' : 'py-2'} border border-gray-700/40 hover:border-purple-500 transition-all duration-200 shadow-sm cursor-text`}
+                aria-label="Abrir busca de jogos"
+              >
                   <Search className={`${isShrunk ? 'w-4 h-4' : 'w-5 h-5'}`} />
                   <span className={`text-sm text-gray-400 hidden sm:inline ${isShrunk ? 'opacity-0 sm:opacity-100' : ''}`}>Pesquisar...</span>
-                </button>
+                <span className="sr-only">Abrir busca</span>
                 <AnimatePresence>
                   {searchTerm && (
                     <motion.button
@@ -193,7 +192,7 @@ export default function Header({ user, setUser, setCart, onSearch }) {
                     </motion.button>
                   )}
                 </AnimatePresence>
-              </div>
+              </button>
             </div>
 
               {/* Search modal */}
@@ -274,16 +273,7 @@ export default function Header({ user, setUser, setCart, onSearch }) {
                         </button>
                       )}
                       
-                      <button
-                        onClick={() => {
-                          navigate("/profile");
-                          setIsUserDropdownOpen(false);
-                        }}
-                        className="flex items-center gap-3 w-full px-4 py-3 text-left text-white hover:bg-purple-600/20 transition group"
-                      >
-                        <Settings size={18} className="text-gray-400 group-hover:text-gray-300" />
-                        <span className="text-sm font-medium">Configurações</span>
-                      </button>
+                      
                       
                       <div className="border-t border-gray-700/50"></div>
                       
@@ -350,6 +340,11 @@ export default function Header({ user, setUser, setCart, onSearch }) {
                     placeholder="Procurar jogos..."
                     value={searchTerm}
                     onChange={(e) => setSearchTerm(e.target.value)}
+                    onKeyDown={(e) => {
+                      if (e.key !== "Enter") return;
+                      navigate("/games");
+                      setIsMenuOpen(false);
+                    }}
                     className="bg-transparent text-white px-3 py-1 w-full focus:outline-none placeholder-gray-400 text-sm"
                     aria-label="Buscar jogos"
                   />
@@ -417,18 +412,7 @@ export default function Header({ user, setUser, setCart, onSearch }) {
                     </motion.button>
                   )}
                   
-                  <motion.button
-                    onClick={() => {
-                      navigate("/profile");
-                      setIsMenuOpen(false);
-                    }}
-                    className="flex items-center gap-3 text-gray-300 hover:text-white transition p-3 rounded-xl hover:bg-gray-800/80 backdrop-blur-sm"
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                  >
-                    <Settings className="w-5 h-5" />
-                    <span className="font-medium">Configurações</span>
-                  </motion.button>
+                
                   
                   <div className="border-t border-gray-800 my-2"></div>
                   
