@@ -283,7 +283,7 @@ export default function Home({ user, setUser, cart, setCart, searchQuery = "" })
                   <input
                     id="search-input"
                     type="search"
-                    placeholder="Buscar jogos... (Cmd/Ctrl + K)"
+                    placeholder="Buscar jogos..."
                     value={localSearch}
                     onChange={(e) => { 
                       setLocalSearch(e.target.value); 

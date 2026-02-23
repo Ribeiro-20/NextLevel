@@ -2,9 +2,9 @@ import { useParams, Link, useNavigate } from "react-router-dom";
 import { useState, useEffect, useMemo, useCallback, useRef } from "react";
 import { db } from "../firebase";
 import { doc, getDoc, collection, getDocs, updateDoc, arrayUnion, arrayRemove } from "firebase/firestore";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence } from "framer-motion";
 import toast, { Toaster } from "react-hot-toast";
-import { Share2, Star, ChevronLeft, ChevronRight, ShoppingCart, Heart, Home, ArrowLeft } from "lucide-react";
+import { Share2, Star, ChevronLeft, ChevronRight, ShoppingCart, Heart, Home, ArrowLeft, X } from "lucide-react";
 
 // Hook personalizado para buscar jogo e relacionados
 const useGameData = (id) => {
@@ -78,6 +78,8 @@ export default function GameDetail({ user, setCart }) {
   const { game, relatedGames, loading, error } = useGameData(id);
   const { isFavorite, setIsFavorite } = useFavoriteStatus(user, game?.id);
   const [currentImage, setCurrentImage] = useState(0);
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxImage, setLightboxImage] = useState(0);
   const [actionLoading, setActionLoading] = useState(false); // Para botões de ação
   const [activeTab, setActiveTab] = useState("descricao");
   const tabsRef = useRef(null);
@@ -190,6 +192,48 @@ export default function GameDetail({ user, setCart }) {
     setCurrentImage((i) => (i + 1) % totalImages);
   };
 
+  // Lightbox navigation
+  const openLightbox = (imageIndex) => {
+    setLightboxImage(imageIndex);
+    setLightboxOpen(true);
+  };
+
+  const closeLightbox = () => {
+    setLightboxOpen(false);
+  };
+
+  const prevLightboxImage = () => {
+    const totalImages = 1 + (game?.images?.length || 0);
+    setLightboxImage((i) => (i - 1 + totalImages) % totalImages);
+  };
+
+  const nextLightboxImage = () => {
+    const totalImages = 1 + (game?.images?.length || 0);
+    setLightboxImage((i) => (i + 1) % totalImages);
+  };
+
+  // Keyboard navigation para lightbox
+  useEffect(() => {
+    if (!lightboxOpen) return;
+    const handleKey = (e) => {
+      if (e.key === "Escape") closeLightbox();
+      if (e.key === "ArrowLeft") prevLightboxImage();
+      if (e.key === "ArrowRight") nextLightboxImage();
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [lightboxOpen]);
+
+  // Esconder header quando lightbox abre
+  useEffect(() => {
+    if (lightboxOpen) {
+      document.body.classList.add("lightbox-open");
+    } else {
+      document.body.classList.remove("lightbox-open");
+    }
+    return () => document.body.classList.remove("lightbox-open");
+  }, [lightboxOpen]);
+
   if (loading) {
     // Skeleton loader melhorado e mais detalhado
     return (
@@ -244,7 +288,7 @@ export default function GameDetail({ user, setCart }) {
   );
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-6">
+    <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black text-white p-3 md:p-6">
       <div className="max-w-6xl mx-auto">
         <Toaster position="top-right" />
         
@@ -266,7 +310,7 @@ export default function GameDetail({ user, setCart }) {
         </motion.div>
 
         {/* Topo: imagem + buy box */}
-        <div className="flex flex-col md:flex-row gap-10">
+        <div className="flex flex-col md:flex-row gap-4 md:gap-10">
           {/* Imagem destacada */}
           <motion.div
             className="md:w-2/3"
@@ -277,7 +321,7 @@ export default function GameDetail({ user, setCart }) {
             <img
               src={currentImage === 0 ? game.banner : (game.images?.[currentImage - 1] || game.banner)}
               alt={`Imagem principal de ${game.title}`}
-              className="w-full h-96 md:h-[560px] object-cover rounded-2xl shadow-lg"
+              className="w-full h-64 md:h-96 lg:h-[560px] object-cover rounded-2xl shadow-lg"
               loading="lazy"
               decoding="async"
             />
@@ -285,12 +329,12 @@ export default function GameDetail({ user, setCart }) {
 
           {/* Buy box */}
           <motion.aside
-            className="md:w-1/3 md:sticky md:top-24 bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-5 h-fit shadow-xl"
+            className="md:w-1/3 md:sticky md:top-24 bg-gradient-to-br from-gray-800 to-gray-900 border border-gray-700 rounded-2xl p-3 md:p-5 h-fit shadow-xl"
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.2 }}
           >
-            <div className="flex items-start justify-between gap-3 mb-3">
+            <div className="flex items-start justify-between gap-2 md:gap-3 mb-2 md:mb-3">
               <h1 className="text-2xl font-bold leading-tight">{game.title}</h1>
               <motion.button
                 onClick={handleShare}
@@ -304,7 +348,7 @@ export default function GameDetail({ user, setCart }) {
             </div>
 
             {/* Rating + plataformas */}
-            <div className="flex flex-wrap items-center gap-2 text-gray-400 text-xs mb-3">
+            <div className="flex flex-wrap items-center gap-1 md:gap-2 text-gray-400 text-xs mb-2 md:mb-3">
               {rating != null && (
                 <div className="flex items-center gap-1">
                   {Array.from({ length: 5 }).map((_, i) => (
@@ -383,7 +427,7 @@ export default function GameDetail({ user, setCart }) {
         {/* Tabs de conteúdo */}
         <motion.div
           ref={tabsRef}
-          className="mt-10"
+          className="mt-6 md:mt-10"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ duration: 0.5, delay: 0.4 }}
@@ -430,12 +474,14 @@ export default function GameDetail({ user, setCart }) {
               <div className="relative">
                 {(game.banner || game.images?.length) ? (
                   <>
-                    <img
+                    <motion.img
                       src={currentImage === 0 ? game.banner : (game.images?.[currentImage - 1] || game.banner)}
                       alt={`Screenshot ${currentImage + 1} de ${game.title}`}
-                      className="w-full h-[520px] md:h-[640px] object-cover rounded-xl"
+                      className="w-full h-64 md:h-96 lg:h-[520px] object-cover rounded-xl cursor-pointer hover:opacity-90 transition"
                       loading="lazy"
                       decoding="async"
+                      onClick={() => openLightbox(currentImage)}
+                      whileHover={{ scale: 1.01 }}
                     />
                     {(game.images?.length > 0 || game.banner) && (
                       <>
@@ -469,9 +515,12 @@ export default function GameDetail({ user, setCart }) {
                     <motion.img
                       src={game.banner}
                       alt="Banner"
-                      className={`w-32 h-20 md:w-40 md:h-24 object-cover rounded-md cursor-pointer border-2 transition ${currentImage === 0 ? "border-purple-500" : "border-transparent hover:border-gray-500"}`}
+                      className={`w-24 h-14 md:w-32 md:h-20 lg:w-40 lg:h-24 object-cover rounded-md cursor-pointer border-2 transition ${currentImage === 0 ? "border-purple-500" : "border-transparent hover:border-gray-500"}`}
                       whileHover={{ scale: 1.02 }}
-                      onClick={() => setCurrentImage(0)}
+                      onClick={() => {
+                        setCurrentImage(0);
+                        openLightbox(0);
+                      }}
                       tabIndex={0}
                       loading="lazy"
                       decoding="async"
@@ -483,13 +532,16 @@ export default function GameDetail({ user, setCart }) {
                       key={i}
                       src={img}
                       alt={`Thumbnail ${i + 1}`}
-                      className={`w-32 h-20 md:w-40 md:h-24 object-cover rounded-md cursor-pointer border-2 transition ${currentImage === i + 1 ? "border-purple-500" : "border-transparent hover:border-gray-500"}`}
+                      className={`w-24 h-14 md:w-32 md:h-20 lg:w-40 lg:h-24 object-cover rounded-md cursor-pointer border-2 transition ${currentImage === i + 1 ? "border-purple-500" : "border-transparent hover:border-gray-500"}`}
                       whileHover={{ scale: 1.02 }}
-                      onClick={() => setCurrentImage(i + 1)}
+                      onClick={() => {
+                        setCurrentImage(i + 1);
+                        openLightbox(i + 1);
+                      }}
                       tabIndex={0}
                       role="button"
                       aria-label={`Ver imagem ${i + 2}`}
-                      onKeyDown={(e) => e.key === "Enter" && setCurrentImage(i + 1)}
+                      onKeyDown={(e) => e.key === "Enter" && openLightbox(i + 1)}
                       loading="lazy"
                       decoding="async"
                     />
@@ -553,6 +605,85 @@ export default function GameDetail({ user, setCart }) {
             </motion.div>
           )}
         </motion.div>
+
+        {/* Lightbox Modal */}
+        <AnimatePresence>
+          {lightboxOpen && (
+            <motion.div
+              className="fixed inset-0 z-50 flex items-center justify-center bg-black/95 backdrop-blur-sm p-4"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              onClick={closeLightbox}
+            >
+              {/* Fechar botão */}
+              <motion.button
+                onClick={closeLightbox}
+                className="absolute top-4 right-4 bg-white/20 hover:bg-white/30 p-2 rounded-full z-60 transition"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="Fechar lightbox"
+              >
+                <X className="w-6 h-6 text-white" />
+              </motion.button>
+
+              {/* Imagem principal */}
+              <motion.div
+                className="max-w-6xl max-h-[85vh] flex flex-col items-center"
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                exit={{ scale: 0.9, opacity: 0 }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                <img
+                  src={lightboxImage === 0 ? game.banner : (game.images?.[lightboxImage - 1] || game.banner)}
+                  alt={`Imagem lightbox ${lightboxImage + 1}`}
+                  className="max-w-full max-h-[75vh] object-contain rounded-lg shadow-2xl"
+                  loading="lazy"
+                  decoding="async"
+                />
+
+                {/* Informação */}
+                <p className="text-white text-sm mt-4">
+                  Imagem {lightboxImage + 1} de {1 + (game?.images?.length || 0)}
+                </p>
+              </motion.div>
+
+              {/* Navegação esquerda */}
+              <motion.button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  prevLightboxImage();
+                }}
+                className="absolute left-4 bg-white/20 hover:bg-white/30 p-3 rounded-full z-60 transition"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="Imagem anterior"
+              >
+                <ChevronLeft className="w-6 h-6 text-white" />
+              </motion.button>
+
+              {/* Navegação direita */}
+              <motion.button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  nextLightboxImage();
+                }}
+                className="absolute right-4 bg-white/20 hover:bg-white/30 p-3 rounded-full z-60 transition"
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.95 }}
+                aria-label="Próxima imagem"
+              >
+                <ChevronRight className="w-6 h-6 text-white" />
+              </motion.button>
+
+              {/* Dica de controles */}
+              <p className="absolute bottom-4 text-white/60 text-xs text-center">
+                Use ← → ou clique nos botões. Pressione ESC para fechar.
+              </p>
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );

@@ -156,3 +156,14 @@ h1, h2, h3, h4, h5, h6 {
 .text-muted {
   color: hsl(var(--muted-foreground));
 }
+
+/* ==========================
+   Lightbox Mode
+========================== */
+body.lightbox-open header {
+  display: none !important;
+}
+
+body.lightbox-open {
+  overflow: hidden;
+}
