@@ -1,0 +1,173 @@
+[
+  {
+    "banner": "https://cdn.cloudflare.steamstatic.com/steam/apps/2920300/library_hero.jpg",
+    "category": "RPG",
+    "description": "Torne-se Geralt de Rivia e embarque numa jornada épica num vasto mundo aberto repleto de monstros, decisões morais e histórias inesquecíveis.",
+    "featured": true,
+    "id": "thewitcher3",
+    "images": [
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/2920300/ss_01.jpg",
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/2920300/ss_02.jpg"
+    ],
+    "platform": ["PC","PS5","PS4","Xbox Series X/S","Xbox One"],
+    "price": 39.99,
+    "promo": 50,
+    "rating": 4.9,
+    "title": "The Witcher 3: Wild Hunt",
+    "trailer": "https://www.youtube-nocookie.com/embed/c0i88t0Kacs"
+  },
+  {
+    "banner": "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/library_hero.jpg",
+    "category": "Acao / Mundo Aberto",
+    "description": "Explore Los Santos e Blaine County numa experiência de mundo aberto com três protagonistas e um modo online massivo.",
+    "featured": true,
+    "id": "gtav",
+    "images": [
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/ss_01.jpg",
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/271590/ss_02.jpg"
+    ],
+    "platform": ["PC","PS5","PS4","Xbox Series X/S","Xbox One"],
+    "price": 29.99,
+    "promo": 60,
+    "rating": 4.7,
+    "title": "Grand Theft Auto V",
+    "trailer": "https://www.youtube-nocookie.com/embed/QkkoHAzjnUs"
+  },
+  {
+    "banner": "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/library_hero.jpg",
+    "category": "RPG / Acao",
+    "description": "Entre em Night City como V, um mercenário em busca de imortalidade num RPG futurista cheio de escolhas e ação intensa.",
+    "featured": true,
+    "id": "cyberpunk2077",
+    "images": [
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/ss_01.jpg",
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/ss_02.jpg",
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/1091500/ss_03.jpg"
+    ],
+    "platform": ["PC","PS5","PS4","Xbox Series X/S","Xbox One"],
+    "price": 59.99,
+    "promo": 40,
+    "rating": 4.2,
+    "title": "Cyberpunk 2077",
+    "trailer": "https://www.youtube-nocookie.com/embed/8X2kIfS6fb8"
+  },
+  {
+    "banner": "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/library_hero.jpg",
+    "category": "RPG",
+    "description": "Um RPG profundo baseado em Dungeons & Dragons com escolhas impactantes, combate estratégico e narrativa rica.",
+    "featured": true,
+    "id": "baldursgate3",
+    "images": [
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/ss_01.jpg",
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/1086940/ss_02.jpg"
+    ],
+    "platform": ["PC","PS5","Xbox Series X/S"],
+    "price": 69.99,
+    "promo": 10,
+    "rating": 4.8,
+    "title": "Baldur's Gate 3",
+    "trailer": "https://www.youtube-nocookie.com/embed/1T22wNvoNiU"
+  },
+  {
+    "banner": "https://cdn.cloudflare.steamstatic.com/steam/apps/3035570/library_hero.jpg",
+    "category": "Acao / Aventura",
+    "description": "Volte às origens da saga Assassin's Creed numa aventura focada em stealth.",
+    "featured": false,
+    "id": "acmirage",
+    "images": [
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/3035570/ss_01.jpg",
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/3035570/ss_02.jpg"
+    ],
+    "platform": ["PC","PS5","PS4","Xbox Series X/S","Xbox One"],
+    "price": 49.99,
+    "promo": 25,
+    "rating": 4.1,
+    "title": "Assassin's Creed Mirage",
+    "trailer": "https://www.youtube-nocookie.com/embed/x55lAlFtXmw"
+  },
+  {
+    "banner": "https://cdn.cloudflare.steamstatic.com/steam/apps/2322010/library_hero.jpg",
+    "category": "Acao / Aventura",
+    "description": "Kratos e Atreus enfrentam o Ragnarok numa jornada épica pelos reinos nórdicos.",
+    "featured": true,
+    "id": "gowragnarok",
+    "images": [
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/2322010/ss_01.jpg",
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/2322010/ss_02.jpg"
+    ],
+    "platform": ["PS5","PS4"],
+    "price": 69.99,
+    "promo": 20,
+    "rating": 4.9,
+    "title": "God of War Ragnarok",
+    "trailer": "https://www.youtube-nocookie.com/embed/EE-4GvjKcfs"
+  },
+  {
+    "banner": "https://cdn.cloudflare.steamstatic.com/steam/apps/1087100/library_hero.jpg",
+    "category": "Terror / Narrativo",
+    "description": "Thriller psicológico intenso onde realidade e ficção se misturam.",
+    "featured": false,
+    "id": "alanwake2",
+    "images": [
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/1087100/ss_01.jpg",
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/1087100/ss_02.jpg"
+    ],
+    "platform": ["PC","PS5","Xbox Series X/S"],
+    "price": 59.99,
+    "promo": 20,
+    "rating": 4.6,
+    "title": "Alan Wake 2",
+    "trailer": "https://www.youtube-nocookie.com/embed/dlQ3FeNu5Yw"
+  },
+  {
+    "banner": "https://cdn.cloudflare.steamstatic.com/steam/apps/1808500/library_hero.jpg",
+    "category": "Acao / Multiplayer",
+    "description": "Shooter cooperativo de extração num futuro pós-apocalíptico.",
+    "featured": true,
+    "id": "arcraiders",
+    "images": [
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/1808500/ss_01.jpg",
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/1808500/ss_02.jpg"
+    ],
+    "platform": ["PC","PS5","Xbox Series X/S"],
+    "price": 39.99,
+    "promo": 20,
+    "rating": 4.4,
+    "title": "Arc Raiders",
+    "trailer": "https://www.youtube-nocookie.com/embed/dSMOZ6HnY5w"
+  },
+  {
+    "banner": "https://cdn.cloudflare.steamstatic.com/steam/apps/2358720/library_hero.jpg",
+    "category": "RPG / Acao",
+    "description": "RPG de ação inspirado na lenda Journey to the West.",
+    "featured": true,
+    "id": "blackmythwukong",
+    "images": [
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/2358720/ss_01.jpg",
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/2358720/ss_02.jpg"
+    ],
+    "platform": ["PC","PS5"],
+    "price": 69.99,
+    "promo": 10,
+    "rating": 4.7,
+    "title": "Black Myth: Wukong",
+    "trailer": "https://www.youtube-nocookie.com/embed/Cr5rQ1NZ0Tw"
+  },
+  {
+    "banner": "https://cdn.cloudflare.steamstatic.com/steam/apps/1903340/library_hero.jpg",
+    "category": "RPG",
+    "description": "RPG em terceira pessoa com combate por turnos e mecânicas em tempo real.",
+    "featured": true,
+    "id": "expedition33",
+    "images": [
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/1903340/ss_01.jpg",
+      "https://cdn.cloudflare.steamstatic.com/steam/apps/1903340/ss_02.jpg"
+    ],
+    "platform": ["PC","PS5","Xbox Series X/S"],
+    "price": 49.99,
+    "promo": 15,
+    "rating": 4.6,
+    "title": "Clair Obscur: Expedition 33",
+    "trailer": "https://www.youtube-nocookie.com/embed/ejgW-upPMgkQ"
+  }
+]
