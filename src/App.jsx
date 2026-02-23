@@ -8,6 +8,7 @@ import { doc, getDoc } from "firebase/firestore";
 import Header from "./components/Header";
 import FloatingCart from "./components/FloatingCart";
 import Home from "./pages/Home";
+import Games from "./pages/Games";
 import Login from "./pages/Login";
 import SignUp from "./pages/SignUp";
 import Checkout from "./pages/Checkout";
@@ -76,6 +77,17 @@ function AppContent() {
               setCart={setCart}
               searchQuery={searchQuery}
               onSearch={setSearchQuery}
+            />
+          }
+        />
+
+        <Route
+          path="/games"
+          element={
+            <Games
+              user={user}
+              setCart={setCart}
+              searchQuery={searchQuery}
             />
           }
         />
