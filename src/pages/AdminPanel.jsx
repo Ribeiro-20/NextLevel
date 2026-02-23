@@ -490,7 +490,7 @@ export default function AdminPanel() {
             </div>
             <div>
               <h2 className="text-xl font-bold text-white">Admin Panel</h2>
-              <p className="text-xs text-gray-400">GameHub Manager</p>
+              <p className="text-xs text-gray-400">NextLevel Manager</p>
             </div>
           </div>
         </div>
@@ -579,7 +579,7 @@ export default function AdminPanel() {
                   </div>
                   <div>
                     <h2 className="text-lg font-bold text-white">Admin Panel</h2>
-                    <p className="text-xs text-gray-400">GameHub</p>
+                    <p className="text-xs text-gray-400">NextLevel</p>
                   </div>
                 </div>
                 <button
